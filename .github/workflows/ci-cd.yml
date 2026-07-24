@@ -9,7 +9,7 @@
 # the full list of fixes and why each one matters.
 # ==============================================================
 
-name: my DevSecOps Pipeline
+name: Jerney DevSecOps Pipeline
 
 on:
   push:
@@ -162,7 +162,9 @@ jobs:
 
       - name: Run Trivy vulnerability scanner
         # FIXED: pinned to a released version instead of the floating "@master" branch.
-        uses: aquasecurity/trivy-action@0.28.0
+        # Verified against the project's actual release history — check
+        # https://github.com/aquasecurity/trivy-action/releases for anything newer.
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           # Scans the short-SHA tag, which was just built above — the exact
           # same image that will be pushed in the next step, not a rebuild.
