@@ -36,11 +36,15 @@ concurrency:
 
 env:
   DOCKER_REGISTRY: ghcr.io
-  # FIXED: BACKEND_IMAGE/FRONTEND_IMAGE now reference ${{ env.DOCKER_REGISTRY }}
-  # instead of hardcoding "ghcr.io" a second time — one place to change the
-  # registry in future, not three.
-  BACKEND_IMAGE: ${{ env.DOCKER_REGISTRY }}/${{ github.repository }}/jerney-backend
-  FRONTEND_IMAGE: ${{ env.DOCKER_REGISTRY }}/${{ github.repository }}/jerney-frontend
+  # FIXED (again): GitHub Actions does NOT allow a variable inside an env:
+  # block to reference another variable defined in that SAME env: block —
+  # "${{ env.DOCKER_REGISTRY }}" here would fail validation with
+  # "Unrecognized named-value: 'env'". env.DOCKER_REGISTRY IS safely usable
+  # later, inside job steps (see the docker login/metadata/scan steps below),
+  # just not here, in this same top-level mapping. So these two lines go back
+  # to a literal "ghcr.io" instead of self-referencing.
+  BACKEND_IMAGE: ghcr.io/${{ github.repository }}/jerney-backend
+  FRONTEND_IMAGE: ghcr.io/${{ github.repository }}/jerney-frontend
 
 jobs:
   # ==============================================================
